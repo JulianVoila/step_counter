@@ -1,35 +1,78 @@
 <script>
   import Example from "$components/Example.svelte";
+  import TextCounter from "$components/TextCounter.svelte";
+  import BarChart from "$components/BarChart.svelte";
+  import CircleChart from "$components/CircleChart.svelte";
   import data from "$data/data.js";
-  console.log(data);
+    import { max, mean, min, sum } from "d3-array";
+
+  let todayData = data[0].todayData
+  let monthData = data[0].monthData
+
+
+  // console.log(todayData);
+  console.log(min(monthData));
+
+  let divWidth = document.getElementById("CC")
+  console.log(divWidth)
+  let width = 1200;
 </script>
 
-<main>
-  <h1>Let's make a chart 😎</h1>
-  <h2>
-    Get started by deleting all of the contents in <pre>App.svelte</pre>
-    🗑
-  </h2>
-  <Example />
-  <footer>
-    For help, <a
-      href="https://twitter.com/CL_Rothschild"
-      target="_blank"
-      rel="noopener noreferrer">DM Connor on Twitter ✉️</a
-    >
-  </footer>
+
+<main class="main-container">
+  <div class="left-container">
+    <h2>Hello, Jules!</h2>
+    <TextCounter textContent={"WORST DAY"} value={min(monthData)}></TextCounter>
+    <TextCounter textContent={"AVG DAY"} value={mean(monthData)}></TextCounter>
+    <TextCounter textContent={"BEST DAY"} value={max(monthData)}></TextCounter>
+    <TextCounter textContent={"TOTAL LAST 28 DAYS"} value={sum(monthData)}></TextCounter>
+    <TextCounter textContent={"TOTAL SO FAR TODAY"} value={sum(todayData)}></TextCounter>
+    <TextCounter textContent={"WORST DAY"} value={max(monthData)-min(monthData)}></TextCounter>
+  </div>
+  <div class="right-container" id="CC">
+    <div class="today-container">
+      <h2>Today</h2>
+      <div class="bar-container" >
+        <BarChart todayData={todayData}></BarChart>
+      </div>
+    </div>
+    <div class="month-container">
+      <h2>Last 28 days</h2>
+      <div class="circle-container">
+        <CircleChart {monthData}></CircleChart>
+      </div>
+    </div>
+  </div>
 </main>
 
 <style>
+
+/* :root {
+  --background-main: #edf4f7;
+  --background-side: #f4f8fa;
+  --primary-blue: #32444d;
+  --secondary-blue: #b3c3cc;
+  --primary-orange: #ff6719;
+  --secondary-orange: #ffaa80;
+} */
+
   main {
-    text-align: center;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
     min-height: 100vh;
-    background: #f0f0f0;
+    background: #edf4f7;
+    display: flex;
+  }
+
+  .left-container {
+    width: 20%;
+    min-width: 250px;
+    background-color: #f4f8fa;
+    /* height: 100%; */
+    min-height: 100vh;
+    padding: 2rem;
+  }
+
+  .right-container {
+    padding: 2rem;
   }
 
   h1 {
